@@ -8,7 +8,8 @@ from datetime import datetime
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Permite solicitudes desde cualquier origen (ideal para desarrollo)
+# ✅ Restringimos CORS solo a tu dominio
+CORS(app, origins=["https://testrobert.work.gd"])
 
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max
 
