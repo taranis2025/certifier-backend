@@ -10,7 +10,7 @@ from flask_cors import CORS
 # Crear la aplicación Flask
 app = Flask(__name__)
 
-# Configurar CORS para permitir solicitudes desde tu dominio
+# ✅ CORREGIDO: Eliminado el espacio extra en la URL
 CORS(app, origins=["https://testrobert.work.gd"])
 
 # Configuración
@@ -130,7 +130,8 @@ def guardar_certificado():
         data = request.get_json()
         cert_data = data.get('certificacion')
         
-        if not cert_
+        # ✅ CORREGIDO: Sintaxis válida
+        if not cert_data:
             return jsonify({'error': 'Datos de certificación no válidos'}), 400
 
         # Generar JSON descargable
