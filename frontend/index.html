@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Certificador Local</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Certificador de Archivos (Production)</h1>
+        
+        <div class="card">
+            <label for="archivo">Selecciona un archivo:</label>
+            <input type="file" id="archivo">
+        </div>
+
+        <div class="card">
+            <label for="propietario">Propietario:</label>
+            <input type="text" id="propietario" value="Usuario">
+        </div>
+
+        <div class="button-group">
+            <button id="btn-certificar">📄 Certificar</button>
+            <button id="btn-guardar">💾 Guardar Certificado</button>
+        </div>
+
+        <div class="results" id="resultados"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
