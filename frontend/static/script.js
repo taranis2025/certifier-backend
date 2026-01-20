@@ -1,5 +1,5 @@
 // Configuración para local
-const BACKEND_URL = 'https://certifier-backend-2.onrender.com';
+const BACKEND_URL = 'https://app.back4app.run';
 
 document.addEventListener('DOMContentLoaded', () => {
     const archivoInput = document.getElementById('archivo');
