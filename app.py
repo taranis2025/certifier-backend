@@ -95,7 +95,7 @@ def verificar():
 def guardar_certificado():
     data = request.get_json()
     cert_data = data.get('certificacion')
-    if not cert_
+    if not cert_data:
         return jsonify({'error': 'Datos inválidos'}), 400
 
     json_bytes = json.dumps(cert_data, indent=2, ensure_ascii=False).encode('utf-8')
