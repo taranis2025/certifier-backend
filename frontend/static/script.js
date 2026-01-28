@@ -1,5 +1,5 @@
 // static/script.js
-const BACKEND_URL = 'https://certifier-backend.onrender.com'; // ✅ URL correcta
+const BACKEND_URL = 'https://certifier-backend.b4a.app'; // ✅ URL de Back4App
 
 document.addEventListener('DOMContentLoaded', () => {
     const archivoInput = document.getElementById('archivo');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultadosDiv.className = `results ${esError ? 'error' : 'success'}`;
     }
 
-    // ✅ CERTIFICAR (usando backend)
+    // ✅ CERTIFICAR
     function certificar() {
         const archivo = archivoInput.files[0];
         const propietario = propietarioInput.value || 'Usuario';
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ✅ VERIFICAR (usando backend - ¡CORREGIDO!)
+    // ✅ VERIFICAR (usando backend en Back4App)
     function verificarIntegridad() {
         const archivo = archivoInput.files[0];
         if (!archivo) {
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Pedir hash original al usuario
         const hashOriginal = prompt('Ingresa el hash SHA-256 original:');
         if (!hashOriginal || hashOriginal.length !== 64) {
             alert('Por favor ingresa un hash SHA-256 válido (64 caracteres)');
@@ -113,7 +112,7 @@ Hash actual:   ${data.hash_actual}
         });
     }
 
-    // ✅ GUARDAR (usando backend)
+    // ✅ GUARDAR
     function guardarCertificado() {
         if (!ultimaCertificacion) {
             alert('Primero certifica un archivo');
