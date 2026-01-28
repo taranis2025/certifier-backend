@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ✅ Verificar integridad (sin backend — todo en el navegador)
-    async function verificarIntegridad() {
+    async function verificar() {
         const archivo = archivoInput.files[0];
         if (!archivo) {
             alert('Selecciona un archivo primero');
