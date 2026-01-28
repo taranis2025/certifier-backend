@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ✅ VERIFICAR (usando backend en Back4App)
-    function verificarIntegridad() {
+    function verificar() {
         const archivo = archivoInput.files[0];
         if (!archivo) {
             alert('Selecciona un archivo primero');
