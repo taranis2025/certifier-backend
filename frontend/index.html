@@ -3,32 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 Certificador Local</title>
-    <link rel="stylesheet" href="style.css">
+    <title>🧪 Prueba de Certificador</title>
+    <link rel="stylesheet" href="test-style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🔐 Certificador de Archivos (Production)</h1>
-        
+        <h1>🧪 Prueba de Certificador - Back4App</h1>
+        <p>Este archivo te permite probar todas las funciones del sistema.</p>
+
+        <!-- Selección de archivo -->
         <div class="card">
-            <label for="archivo">Selecciona un archivo:</label>
-            <input type="file" id="archivo">
+            <label for="archivo">Archivo a probar:</label>
+            <input type="file" id="archivo" accept="*/*">
         </div>
 
+        <!-- Propietario -->
         <div class="card">
             <label for="propietario">Propietario:</label>
-            <input type="text" id="propietario" value="Usuario">
+            <input type="text" id="propietario" value="Usuario de Prueba">
         </div>
 
+        <!-- Botones de prueba -->
         <div class="button-group">
-           <button id="btn-certificar">📄 Certificar Archivo</button>
-           <button id="btn-verificar">🔍 Verificar Integridad</button>
-           <button id="btn-guardar">💾 Guardar Certificación</button>
-       </div>
+            <button id="btn-certificar" class="btn-primary">📄 Certificar Archivo</button>
+            <button id="btn-verificar" class="btn-success">🔍 Verificar Integridad</button>
+            <button id="btn-guardar" class="btn-info">💾 Guardar Certificación</button>
+        </div>
 
+        <!-- Resultados -->
         <div class="results" id="resultados"></div>
+
+        <!-- Instrucciones -->
+        <div class="instructions">
+            <h3>📋 Instrucciones de prueba:</h3>
+            <ol>
+                <li>Selecciona cualquier archivo (texto, imagen, PDF, etc.)</li>
+                <li>Haz clic en "Certificar Archivo"</li>
+                <li>Copia el hash SHA-256 que aparece</li>
+                <li>Mantén el mismo archivo seleccionado y haz clic en "Verificar Integridad"</li>
+                <li>Pega el hash SHA-256 cuando te lo pida</li>
+                <li>¡Deberías ver "✅ INTEGRIDAD VERIFICADA"!</li>
+            </ol>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="test-script.js"></script>
 </body>
 </html>
