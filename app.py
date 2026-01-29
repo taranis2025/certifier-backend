@@ -138,12 +138,12 @@ def guardar_certificado():
         data = request.get_json()
         cert_data = data.get('certificacion')
         
-        if not cert_
+        if not cert_data:
             return jsonify({'error': 'Datos de certificación no válidos'}), 400
 
         # Validar que los datos contengan la estructura esperada
         required_fields = ['nombre_archivo', 'hashes', 'fecha_certificacion']
-        if not all(field in cert_ for field in required_fields):
+        if not all(field in cert_data for field in required_fields):
             return jsonify({'error': 'Datos de certificación incompletos'}), 400
 
         # Crear JSON descargable
