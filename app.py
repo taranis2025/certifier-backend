@@ -7,20 +7,14 @@ from datetime import datetime
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 
-# Crear la aplicación Flask
 app = Flask(__name__)
-
-# Configurar CORS para tu dominio
 CORS(app, origins=["https://testrobert.work.gd"])
 
-# Configuración de tamaño máximo de archivo
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
-# Almacenamiento temporal en memoria
 certificaciones = {}
 
 def generar_hash(ruta_archivo, algoritmo='sha256'):
-    """Genera hash de un archivo"""
     hash_obj = hashlib.new(algoritmo)
     with open(ruta_archivo, 'rb') as f:
         for bloque in iter(lambda: f.read(4096), b""):
@@ -29,15 +23,10 @@ def generar_hash(ruta_archivo, algoritmo='sha256'):
 
 @app.route('/')
 def home():
-    """Ruta raíz para verificar que el backend está activo"""
-    return jsonify({
-        "status": "ok",
-        "mensaje": "Certificador Backend Activo en Back4App"
-    })
+    return jsonify({"status": "ok", "mensaje": "Certificador Backend Activo"})
 
 @app.route('/api/certificar', methods=['POST'])
 def certificar():
-    """Certifica un archivo y genera hashes"""
     try:
         if 'archivo' not in request.files:
             return jsonify({'error': 'No se envió ningún archivo'}), 400
@@ -48,50 +37,36 @@ def certificar():
         if archivo.filename == '':
             return jsonify({'error': 'Archivo sin nombre'}), 400
 
-        # Guardar temporalmente
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             archivo.save(tmp.name)
             ruta_temp = tmp.name
 
-        # Obtener metadatos
         stats = os.stat(ruta_temp)
-        nombre_archivo = archivo.filename
-        tamanio = stats.st_size
-
-        # Generar hashes
         hashes = {
             'sha256': generar_hash(ruta_temp, 'sha256'),
             'sha1': generar_hash(ruta_temp, 'sha1'),
             'md5': generar_hash(ruta_temp, 'md5')
         }
 
-        # Crear certificación
         certificacion = {
-            "nombre_archivo": nombre_archivo,
+            "nombre_archivo": archivo.filename,
             "propietario": propietario,
             "fecha_certificacion": datetime.now().isoformat(),
-            "tamanio_bytes": tamanio,
+            "tamanio_bytes": stats.st_size,
             "hashes": hashes,
             "estado": "CERTIFICADO"
         }
 
-        # Guardar en memoria (clave: SHA-256)
         certificaciones[hashes['sha256']] = certificacion
-        
-        # Limpiar archivo temporal
         os.unlink(ruta_temp)
 
-        return jsonify({
-            "success": True,
-            "certificacion": certificacion
-        })
+        return jsonify({"success": True, "certificacion": certificacion})
 
     except Exception as e:
-        return jsonify({'error': f'Error al procesar: {str(e)}'}), 500
+        return jsonify({'error': f'Error: {str(e)}'}), 500
 
 @app.route('/api/verificar', methods=['POST'])
 def verificar():
-    """Verifica la integridad de un archivo comparando hashes"""
     try:
         if 'archivo' not in request.files:
             return jsonify({'error': 'No se envió ningún archivo'}), 400
@@ -102,23 +77,14 @@ def verificar():
         if not hash_original:
             return jsonify({'error': 'Hash original no proporcionado'}), 400
 
-        # Validar que el hash tenga formato correcto (64 caracteres hexadecimales)
-        if len(hash_original) != 64 or not all(c in '0123456789abcdefABCDEF' for c in hash_original):
-            return jsonify({'error': 'Hash SHA-256 inválido'}), 400
-
-        # Guardar temporalmente el archivo a verificar
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             archivo.save(tmp.name)
             ruta_temp = tmp.name
 
-        # Calcular hash actual (SHA-256)
         hash_actual = generar_hash(ruta_temp, 'sha256')
-        
-        # Limpiar archivo temporal
         os.unlink(ruta_temp)
 
-        # Comparar hashes (case-insensitive)
-        integro = hash_actual.lower() == hash_original.lower()
+        integro = hash_actual == hash_original
 
         return jsonify({
             "success": True,
@@ -129,24 +95,17 @@ def verificar():
         })
 
     except Exception as e:
-        return jsonify({'error': f'Error en verificación: {str(e)}'}), 500
+        return jsonify({'error': f'Error: {str(e)}'}), 500
 
 @app.route('/api/guardar-certificado', methods=['POST'])
 def guardar_certificado():
-    """Genera un archivo JSON descargable con la certificación"""
     try:
         data = request.get_json()
         cert_data = data.get('certificacion')
         
-        if not cert_data:
-            return jsonify({'error': 'Datos de certificación no válidos'}), 400
+        if not cert_
+            return jsonify({'error': 'Datos inválidos'}), 400
 
-        # Validar que los datos contengan la estructura esperada
-        required_fields = ['nombre_archivo', 'hashes', 'fecha_certificacion']
-        if not all(field in cert_data for field in required_fields):
-            return jsonify({'error': 'Datos de certificación incompletos'}), 400
-
-        # Crear JSON descargable
         json_bytes = json.dumps(cert_data, indent=2, ensure_ascii=False).encode('utf-8')
         
         with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as tmp:
@@ -156,9 +115,8 @@ def guardar_certificado():
         return send_file(tmp_path, as_attachment=True, download_name='certificado.json')
 
     except Exception as e:
-        return jsonify({'error': f'Error al guardar: {str(e)}'}), 500
+        return jsonify({'error': f'Error: {str(e)}'}), 500
 
-# ⚠️ Configuración crítica para Back4App
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
