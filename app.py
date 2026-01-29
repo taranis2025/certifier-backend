@@ -10,7 +10,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, origins=["https://testrobert.work.gd"])
 
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 certificaciones = {}
 
@@ -101,10 +101,10 @@ def verificar():
 def guardar_certificado():
     try:
         data = request.get_json()
-        cert_data = data.get('certificacion')
+        cert_data = data.get('certificacion')  # ✅ Correcto: cert_data
         
-        if not cert_
-            return jsonify({'error': 'Datos inválidos'}), 400
+        if not cert_data:  # ✅ Correcto: con ":" al final
+            return jsonify({'error': 'Datos de certificación no válidos'}), 400
 
         json_bytes = json.dumps(cert_data, indent=2, ensure_ascii=False).encode('utf-8')
         
