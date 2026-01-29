@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ultimaCertificacion = null;
 
+    // ✅ Asegurar que los botones existen
+    if (!btnCertificar || !btnVerificar || !btnGuardar) {
+        console.error('Botones no encontrados');
+        return;
+    }
+
     btnCertificar.addEventListener('click', certificar);
     btnVerificar.addEventListener('click', verificarIntegridad);
     btnGuardar.addEventListener('click', guardarCertificado);
@@ -66,15 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ✅ FUNCIÓN VERIFICAR CORREGIDA
     function verificarIntegridad() {
         const archivo = archivoInput.files[0];
         if (!archivo) {
-            alert('Selecciona un archivo primero');
+            alert('⚠️ Selecciona un archivo primero');
             return;
         }
 
-        const hashOriginal = prompt('Ingresa el hash SHA-256 original:');
-        if (!hashOriginal) {
+        // ✅ Usa prompt() directamente - esto debería abrir el cuadro de diálogo
+        const hashOriginal = prompt('🔐 Ingresa el hash SHA-256 original:');
+        
+        if (hashOriginal === null) {
+            // Usuario canceló
+            console.log('Verificación cancelada');
+            return;
+        }
+
+        if (!hashOriginal || hashOriginal.length !== 64) {
+            alert('❌ Hash SHA-256 inválido!\nDebe tener 64 caracteres hexadecimales.');
             return;
         }
 
@@ -91,9 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success) {
                 const estado = data.integro ? '✅ INTEGRIDAD VERIFICADA' : '❌ INTEGRIDAD COMPROMETIDA';
                 const resultado = `
-=== RESULTADO DE VERIFICACIÓN ===
-Estado: ${estado}
-Fecha: ${data.verificacion_fecha.split('T')[0]}
+${estado}
 
 Hash original: ${data.hash_original}
 Hash actual:   ${data.hash_actual}
